@@ -2,14 +2,8 @@
 -include env_make
 
 VERSION ?= 7.1
-
-# tag naming schema: <image-repo>:[<software-version>-]<image-stability-tag>[-tag-appendix][-<flavor>]
-# uncomment lines bellow if you want include this in tag name
-# SOFTWARE_VERSION ?= $(VERSION)
-# FLAVOR ?= custom
-
-TAG_APPENDIX ?= php$(VERSION)
-BUILD_TAG = build-$(TAG_APPENDIX)
+SOFTWARE_VERSION ?= php$(VERSION)
+BUILD_TAG = build-$(SOFTWARE_VERSION)
 REPO = docksal/cli
 NAME = docksal-cli-$(VERSION)
 CWD = $(shell pwd)
@@ -22,7 +16,7 @@ VOLUMES += -v /home/docker
 .PHONY: build test push shell run start stop logs clean release
 
 build:
-	docker build --cache-from=$(REPO):edge$(TAG_APPENDIX) -t $(REPO):$(BUILD_TAG) .
+	docker build --cache-from=$(REPO):edge-$(SOFTWARE_VERSION) -t $(REPO):$(BUILD_TAG) .
 
 test:
 	IMAGE=$(REPO):$(BUILD_TAG) NAME=$(NAME) VERSION=$(VERSION) ../tests/test.bats
